@@ -17,7 +17,7 @@ const { title, description = 'FieldSketch — Field inspection sketches, done ri
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
       :root {
         --field-blue: #1D4ED8;
@@ -25,21 +25,22 @@ const { title, description = 'FieldSketch — Field inspection sketches, done ri
         --field-dark: #1E3A5F;
         --field-white: #F8FAFC;
         --field-grid: #CBD5E1;
+        --field-slate: #475569;
         --ink: #1C1C2E;
       }
 
       html { scroll-behavior: smooth; }
-      * { box-sizing: border-box; }
+      *, *::before, *::after { box-sizing: border-box; }
 
       /* Noise texture */
       .noise::before {
         content: '';
         position: absolute;
         inset: 0;
-        opacity: 0.03;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         background-repeat: repeat;
-        background-size: 256px 256px;
+        background-size: 512px 512px;
         pointer-events: none;
         z-index: 1;
       }
@@ -49,57 +50,52 @@ const { title, description = 'FieldSketch — Field inspection sketches, done ri
       /* Scroll animations */
       .reveal {
         opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: translateY(40px);
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
       }
-      .reveal.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      .reveal.visible { opacity: 1; transform: translateY(0); }
+
       .reveal-left {
         opacity: 0;
-        transform: translateX(-40px);
-        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: translateX(-50px);
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
       }
-      .reveal-left.visible {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
       .reveal-right {
         opacity: 0;
-        transform: translateX(40px);
-        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: translateX(50px);
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
       }
-      .reveal-right.visible {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
       /* CTA micro-interaction */
       .cta-pulse {
-        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
       }
-      .cta-pulse:hover {
-        transform: translateY(-2px) scale(1.02);
-      }
-      .cta-pulse:active {
-        transform: translateY(0) scale(0.98);
-      }
+      .cta-pulse:hover { transform: translateY(-3px) scale(1.03); }
+      .cta-pulse:active { transform: translateY(0) scale(0.97); }
 
       /* Hero stagger */
       @keyframes heroReveal {
-        0% { opacity: 0; transform: translateY(20px); }
-        100% { opacity: 1; transform: translateY(0); }
+        0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
       }
       .hero-stagger > * {
         opacity: 0;
-        animation: heroReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: heroReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       }
-      .hero-stagger > *:nth-child(1) { animation-delay: 0.1s; }
-      .hero-stagger > *:nth-child(2) { animation-delay: 0.25s; }
-      .hero-stagger > *:nth-child(3) { animation-delay: 0.4s; }
-      .hero-stagger > *:nth-child(4) { animation-delay: 0.55s; }
-      .hero-stagger > *:nth-child(5) { animation-delay: 0.7s; }
+      .hero-stagger > *:nth-child(1) { animation-delay: 0.15s; }
+      .hero-stagger > *:nth-child(2) { animation-delay: 0.35s; }
+      .hero-stagger > *:nth-child(3) { animation-delay: 0.55s; }
+      .hero-stagger > *:nth-child(4) { animation-delay: 0.75s; }
+      .hero-stagger > *:nth-child(5) { animation-delay: 0.95s; }
+
+      /* Stagger children */
+      .stagger-children > *:nth-child(1) { transition-delay: 0s; }
+      .stagger-children > *:nth-child(2) { transition-delay: 0.1s; }
+      .stagger-children > *:nth-child(3) { transition-delay: 0.15s; }
+      .stagger-children > *:nth-child(4) { transition-delay: 0.2s; }
     </style>
   </head>
   <body class="font-sans text-ink bg-field-white antialiased overflow-x-hidden">
@@ -111,7 +107,7 @@ const { title, description = 'FieldSketch — Field inspection sketches, done ri
             el.target.classList.add('visible');
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.08 });
       document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
     </script>
   </body>
